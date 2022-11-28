@@ -10,8 +10,14 @@ class PolyTreeNode
 
     def parent=(node)
         if !self.parent.nil?
-            self.parent = node
-        end
+            self.parent = node 
+        else
+            self.parent = nil
+        end #This is causing the infinite loop
+            if !self.children.include?(node)
+                node.children << self.children
+            end 
+        # end
         
     end
 
