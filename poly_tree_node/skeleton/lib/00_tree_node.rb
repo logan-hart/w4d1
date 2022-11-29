@@ -1,29 +1,31 @@
 class PolyTreeNode
-    
     attr_reader :parent, :children, :value
-
     def initialize(value, parent=nil, children=[])
         @parent = parent
         @children = children
         @value = value
     end
-
     def parent=(node)
+        if !@parent.nil?
+            self.parent.children.delete(self)
+        end
         @parent = node
-        if !@parent.children.include?(self) && !self.children.nil?
+        if !@parent.nil? && !@parent.children.include?(self)
             @parent.children << self
         end
-        
-        # if !self.parent.nil?
-        #     self.parent = node 
-        # else
-        #     self.parent = nil
-        # end #This is causing the infinite loop
-        #     if !self.children.include?(node)
-        #         node.children << self.children
-        # #     end 
-        # # end
-        
     end
+    def add_child(node)
+        if !self.children.include?(node)
+            self.children << node
+        end
+        node.parent = self
+    end
+    def remove_child(node)
+        idx = self.children.index(node)
+        self.children[idx].parent = nil
+        self.children.delete(node)
+        raise "NOT VALID" if idx.nil?
+    end
+
 
 end
